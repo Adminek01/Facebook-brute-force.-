@@ -19,26 +19,12 @@ This tool is designed for ethical hacking purposes only. It provides a set of fu
 
 ## Use
 ```
+wget https://github.com/danielmiessler/SecLists/blob/master/Passwords/darkweb2017-top10000.txt
 
-### Commands
-- **Host Connection Check:**
-  ```bash
-  python your_script.py check_network
-  ```
-
-- **Proxy and Ports Check:**
-  ```bash
-  python your_script.py check_proxy <ip_address> <port>
-  ```
-
-- **Fetching Victim Profile ID:**
-  ```bash
-  python your_script.py get_profile_id <victim_profile_url>
-  ```
 
 - **Brute Force Attack:**
   ```bash
-  python your_script.py brute_force <target_url> <wordlist_path>
+  python your_script.py brute_force <target_id> <wordlist_path>
   ```
 
 Replace `<placeholders>` with actual values.
